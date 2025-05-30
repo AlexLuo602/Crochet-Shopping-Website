@@ -1,0 +1,15 @@
+import { MOCK_DATA_JSON_STRING } from "./assets/mock_data";
+
+export const getMockData = async () => {
+	const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
+	const itemInstances = parsedData.map((itemJson) => {
+		return {
+			id: itemJson.id,
+			title: itemJson.title,
+			category: itemJson.category,
+			description: itemJson.description,
+			price: itemJson.price,
+			imageUrl: itemJson.imageUrl,
+		};
+	});
+};

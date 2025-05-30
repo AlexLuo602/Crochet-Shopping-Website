@@ -1,0 +1,52 @@
+.item-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 15rem));
+	gap: 1rem;
+	padding-bottom: 2rem;
+	margin: auto;
+	place-content: center;
+}
+
+.content {
+	padding-left: 5rem;
+	padding-right: 5rem;
+}
+
+.title {
+	text-align: center;
+}
+
+.search {
+	display: flex;
+	width: 40%;
+	margin: auto;
+}
+
+.search input[type="submit"] {
+	margin-top: 0.2rem;
+	margin-left: 0.5rem;
+	width: 100px;
+}
+
+.sub-links {
+	display: flex;
+	margin: auto;
+	justify-content: center;
+}
+
+.sub-links a {
+	--pico-text-decoration: none;
+	padding: 1rem;
+}
+
+.categories {
+	display: flex;
+	margin: auto;
+	justify-content: center;
+}
+
+.category {
+	margin-right: 0.3rem;
+	margin-left: 0.3rem;
+	margin-bottom: 1rem;
+}

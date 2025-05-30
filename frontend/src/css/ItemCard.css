@@ -1,0 +1,30 @@
+.item-card {
+	overflow: hidden;
+	border-radius: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	background-color: #00000042;
+	--pico-text-decoration: none;
+	--pico-color: var(--pico-color);
+}
+
+.item-card:hover img {
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.item-card h3 {
+	margin-top: 1rem;
+	margin-bottom: 0.2rem;
+	padding-left: 0.6rem;
+}
+
+.item-card p {
+	padding-left: 0.6rem;
+	text-align: left;
+}
+
+.item-text {
+	margin-top: auto;
+}
