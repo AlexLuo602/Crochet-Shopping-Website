@@ -17,6 +17,7 @@
 	max-height: 35rem;
 	border-radius: 0.8rem;
 	margin-right: 1rem;
+	margin-bottom: 1.2rem;
 	align-self: center;
 }
 
@@ -134,5 +135,17 @@
 		min-width: 15rem;
 		font-size: 0.8rem;
 		overflow: hidden;
+	}
+
+	.shopping-cart h1 {
+		font-size: 1.2rem;
+	}
+
+	.shopping-cart h4 {
+		font-size: 1rem;
+	}
+
+	.quantity-overlay {
+		font-size: 16px;
 	}
 }
