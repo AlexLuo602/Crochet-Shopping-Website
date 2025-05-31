@@ -76,7 +76,8 @@ function ItemDetails() {
 							</select>
 							<div className="quantity-overlay">Quantity: </div>
 						</div>
-						<input className="add-to-cart" type="submit" value="Add To Cart" />
+						<input className="add-to" type="submit" value="Add to Cart" />
+						<input className="add-to" type="submit" value="Add to Wishlist" />
 					</form>
 				</div>
 			</article>
