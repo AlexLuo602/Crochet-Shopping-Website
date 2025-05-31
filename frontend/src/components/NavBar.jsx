@@ -6,15 +6,21 @@ function Navbar() {
 		<nav className="navbar">
 			<ul>
 				<li>
-					<Link to="/">Home</Link>
+					<Link to="/">
+						<div>Home</div>
+					</Link>
 				</li>
 			</ul>
 			<ul>
 				<li>
-					<Link to="/shopping_cart">Shopping Cart</Link>
+					<Link to="/shopping_cart">
+						<div>Shopping Cart</div>
+					</Link>
 				</li>
 				<li>
-					<Link to="/wishlist">Wishlist</Link>
+					<Link to="/wishlist">
+						<div>Wishlist</div>
+					</Link>
 				</li>
 			</ul>
 		</nav>

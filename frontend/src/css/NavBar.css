@@ -1,8 +1,17 @@
 .navbar {
 	padding-left: 6rem;
 	padding-right: 6rem;
+	background-color: rgba(9, 88, 133, 0.836);
+	margin-bottom: 1rem;
+	font-weight: bolder;
 }
 
 .navbar a {
 	--pico-color: var(--pico-color);
+}
+
+@media (prefers-color-scheme: light) {
+	.navbar div {
+		color: white;
+	}
 }
