@@ -1,48 +1,26 @@
 import { useState, useEffect } from "react";
 import "../css/Home.css";
-import ItemCard from "../components/ItemCard";
-import { MOCK_DATA_JSON_STRING } from "../assets/mock_data";
+import { useSelector } from "react-redux";
 import ItemGrid from "../components/ItemGrid";
 
 function Search() {
+	const allItems = useSelector((state) => state.items.items);
 	const [items, setItems] = useState([]);
-	const [searchText, setSearchText] = useState();
-	const [searchResult, setSearchResult] = useState();
+	const [searchText, setSearchText] = useState("");
+	const [searchResult, setSearchResult] = useState("");
+	const [status, setStatus] = useState("initial");
 
 	useEffect(() => {
-		try {
-			const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
-			const itemInstances = parsedData.map((itemJson) => {
-				return {
-					id: itemJson.id,
-					title: itemJson.title,
-					category: itemJson.category,
-					description: itemJson.description,
-					price: parseInt(itemJson.price).toFixed(2),
-					imageUrl: itemJson.imageUrl,
-				};
-			});
-			setItems(itemInstances);
-		} catch (error) {
-			console.error("Failed to parse item data:", error);
+		if (status === "initial") {
+			setItems(allItems);
+			setStatus("loaded");
 		}
-	}, []);
+	}, [status]);
 
 	const handleSearch = async (e) => {
 		e.preventDefault();
 
-		const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
-		const itemInstances = parsedData.map((itemJson) => {
-			return {
-				id: itemJson.id,
-				title: itemJson.title,
-				category: itemJson.category,
-				description: itemJson.description,
-				price: parseInt(itemJson.price).toFixed(2),
-				imageUrl: itemJson.imageUrl,
-			};
-		});
-		const filtered_items = itemInstances.filter((item) => {
+		const filtered_items = allItems.filter((item) => {
 			const title_lower = item.title.toLowerCase();
 			const search_lower = searchText.toLowerCase();
 			return title_lower.includes(search_lower);

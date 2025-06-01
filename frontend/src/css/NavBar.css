@@ -6,12 +6,34 @@
 	font-weight: bolder;
 }
 
+.navbar div {
+	color: white;
+}
+
 .navbar a {
 	--pico-color: var(--pico-color);
 }
 
-@media (prefers-color-scheme: light) {
-	.navbar div {
-		color: white;
-	}
+.navbar-cart-icon-with-items {
+	position: relative;
+}
+
+.navbar-cart-icon {
+	max-width: 1.5rem;
+}
+
+.navbar-shopping-cart-quantity {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-left: 0.6rem;
+	padding-bottom: 1.4rem;
+	pointer-events: none;
+	font-size: 15px;
+	font-weight: 480;
 }

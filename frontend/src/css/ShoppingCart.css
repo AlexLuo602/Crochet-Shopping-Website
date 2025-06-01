@@ -1,0 +1,26 @@
+.container {
+	margin-bottom: 1.5rem;
+}
+
+.shopping-cart-product {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.shopping-cart-product-image {
+	max-height: 8rem;
+	max-width: 4.8rem;
+	border-radius: 0.8rem;
+}
+
+.clear-cart {
+	display: flex;
+}
+
+@media (max-width: 800px) {
+	.shopping-cart-product {
+		flex-direction: column;
+		gap: 0.1rem;
+	}
+}

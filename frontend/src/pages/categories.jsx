@@ -1,50 +1,28 @@
 import { useState, useEffect } from "react";
 import ItemGrid from "../components/ItemGrid";
-import { MOCK_DATA_JSON_STRING } from "../assets/mock_data";
+import { useSelector } from "react-redux";
 import "../css/Home.css";
 
 function Categories() {
+	const allItems = useSelector((state) => state.items.items);
 	const [items, setItems] = useState([]);
+	const [status, setStatus] = useState("initial");
 	const [category, setCategory] = useState();
 
 	useEffect(() => {
-		try {
-			const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
-			const itemInstances = parsedData.map((itemJson) => {
-				return {
-					id: itemJson.id,
-					title: itemJson.title,
-					category: itemJson.category,
-					description: itemJson.description,
-					price: parseInt(itemJson.price).toFixed(2),
-					imageUrl: itemJson.imageUrl,
-				};
-			});
-			setItems(itemInstances);
-		} catch (error) {
-			console.error("Failed to parse item data:", error);
+		if (status === "initial") {
+			setItems(allItems);
+			setStatus("loaded");
 		}
-	}, []);
+	}, [status]);
 
 	const handleCategoryClick = async (category_name) => {
-		setCategory(category_name);
-
-		const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
-		const itemInstances = parsedData.map((itemJson) => {
-			return {
-				id: itemJson.id,
-				title: itemJson.title,
-				category: itemJson.category,
-				description: itemJson.description,
-				price: parseInt(itemJson.price).toFixed(2),
-				imageUrl: itemJson.imageUrl,
-			};
-		});
-		const filtered_items = itemInstances.filter((item) => {
+		const filtered_items = allItems.filter((item) => {
 			return item.category === category_name;
 		});
 
 		setItems(filtered_items);
+		setCategory(category_name);
 	};
 
 	return (

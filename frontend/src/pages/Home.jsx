@@ -1,31 +1,20 @@
 import { useState, useEffect } from "react";
-import ItemCard from "../components/ItemCard";
-import { MOCK_DATA_JSON_STRING } from "../assets/mock_data";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "../css/Home.css";
 import ItemGrid from "../components/ItemGrid";
 
 function Home() {
+	const allItems = useSelector((state) => state.items.items);
 	const [items, setItems] = useState([]);
+	const [status, setStatus] = useState("initial");
 
 	useEffect(() => {
-		try {
-			const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
-			const itemInstances = parsedData.map((itemJson) => {
-				return {
-					id: itemJson.id,
-					title: itemJson.title,
-					category: itemJson.category,
-					description: itemJson.description,
-					price: parseInt(itemJson.price).toFixed(2),
-					imageUrl: itemJson.imageUrl,
-				};
-			});
-			setItems(itemInstances);
-		} catch (error) {
-			console.error("Failed to parse item data:", error);
+		if (status === "initial") {
+			setItems(allItems);
+			setStatus("loaded");
 		}
-	}, []);
+	}, [status]);
 
 	return (
 		<div className="content">

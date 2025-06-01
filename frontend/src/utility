@@ -8,7 +8,7 @@ export const getMockData = async () => {
 			title: itemJson.title,
 			category: itemJson.category,
 			description: itemJson.description,
-			price: itemJson.price,
+			price: parseInt(itemJson.price).toFixed(2),
 			imageUrl: itemJson.imageUrl,
 		};
 	});
