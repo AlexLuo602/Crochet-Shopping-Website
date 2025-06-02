@@ -26,6 +26,9 @@ function Home() {
 				<Link to="/search">
 					<h3>Search</h3>
 				</Link>
+				<Link to="/shopping_cart">
+					<h3>Shopping Cart</h3>
+				</Link>
 			</div>
 			<ItemGrid items={items} />
 		</div>
