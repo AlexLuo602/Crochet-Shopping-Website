@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import Log from "../util/Log.js";
+import { MOCK_DATA_JSON_STRING } from "./mock_data.js";
+import path from "path";
+import StatusCodes from "http-status-codes"
 
 export default class Server {
   constructor(port) {
@@ -10,6 +13,7 @@ export default class Server {
 
     this.registerMiddleware();
     this.registerRoutes();
+    this.registerStaticFiles();
   }
 
   async start() {
@@ -38,8 +42,37 @@ export default class Server {
   }
 
   registerRoutes() {
-    this.express.get("/", (req, res) => {
-      res.send("HI");
+    this.express.get("/items", (req, res) => {
+      Log.info(`Server::ItemsService(..) - Send Items`);
+
+      let itemsToSend;
+      try {
+          const parsedData = JSON.parse(MOCK_DATA_JSON_STRING);
+
+          const backendBaseUrl = `http://localhost:${this.port}`;
+
+          itemsToSend = parsedData.map((itemJson) => {
+              return {
+                  id: itemJson.id,
+                  title: itemJson.title,
+                  category: itemJson.category,
+                  description: itemJson.description,
+                  price: parseFloat(itemJson.price).toFixed(2),
+                  imageUrl: `${backendBaseUrl}${itemJson.imageUrl}`,
+              };
+          });
+      } catch (error) {
+          console.error("Error parsing mock data or preparing items:", error);
+          return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Failed to process items" });
+      }
+
+      res.status(StatusCodes.OK).json({ result: itemsToSend });
     });
+  }
+
+  registerStaticFiles() {
+    const publicPath = path.resolve(process.cwd(), "public");
+    this.express.use(express.static(publicPath));
+    Log.info("Server::registerStaticFiles() - public path set")
   }
 }

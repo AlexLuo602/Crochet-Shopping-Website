@@ -6,7 +6,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Amigurumi",
 		"description": "An adorable handmade crochet otter plushie, perfect for gifting or collecting. Features a little blue heart.",
 		"price": 28.50,
-		"imageUrl": "/otter.png"
+		"imageUrl": "/images/otter.png"
 	},
 	{
 		"id": 2,
@@ -14,7 +14,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Home Decor",
 		"description": "A beautiful set of crochet lily cup coasters in pastel shades, adding a touch of elegance to your home.",
 		"price": 35.00,
-		"imageUrl": "/lily_coasters.png"
+		"imageUrl": "/images/lily_coasters.png"
 	},
 	{
 		"id": 3,
@@ -22,7 +22,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Keychains",
 		"description": "A charming crochet puppy head keychain, meticulously crafted with expressive eyes. Great for dog lovers!",
 		"price": 12.75,
-		"imageUrl": "/puppy_keychain.png"
+		"imageUrl": "/images/puppy_keychain.png"
 	},
 	{
 		"id": 4,
@@ -30,7 +30,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Bags & Pouches",
 		"description": "A cute crochet pouch shaped like a whale, with a drawstring closure and a little starfish detail. Ideal for small treasures.",
 		"price": 22.00,
-		"imageUrl": "/whale_pouch.png"
+		"imageUrl": "/images/whale_pouch.png"
 	},
 	{
 		"id": 5,
@@ -38,7 +38,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Accessories",
 		"description": "A delicate handmade crochet bow in soft pink, perfect as a hair accessory or embellishment.",
 		"price": 9.99,
-		"imageUrl": "/pink_bow.png"
+		"imageUrl": "/images/pink_bow.png"
 	},
 	{
 		"id": 6,
@@ -46,7 +46,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Amigurumi",
 		"description": "A detailed crochet plushie of the beloved Sylveon character, featuring its signature ribbons.",
 		"price": 45.00,
-		"imageUrl": "/sylveon.png"
+		"imageUrl": "/images/sylveon.png"
 	},
 	{
 		"id": 7,
@@ -54,7 +54,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Keychains",
 		"description": "An adorable crochet bear head keychain with a sturdy metal ring, a perfect companion for your keys.",
 		"price": 11.50,
-		"imageUrl": "/bear_keychain.png"
+		"imageUrl": "/images/bear_keychain.png"
 	},
 	{
 		"id": 8,
@@ -62,7 +62,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Home Decor",
 		"description": "A charming crochet succulent in a small pot, a low-maintenance plant that adds greenery to any space.",
 		"price": 18.00,
-		"imageUrl": "/succulent.png"
+		"imageUrl": "/images/succulent.png"
 	},
 	{
 		"id": 9,
@@ -70,7 +70,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Amigurumi",
 		"description": "A delightful crochet macaron featuring the popular Sanrio character Pochacco, soft and squishy.",
 		"price": 15.00,
-		"imageUrl": "/pochacco_macaron.png"
+		"imageUrl": "/images/pochacco_macaron.png"
 	},
 	{
 		"id": 10,
@@ -78,7 +78,7 @@ export const MOCK_DATA_JSON_STRING = `
 		"category": "Amigurumi",
 		"description": "A small, lovable crochet dog plushie, perfect for cuddling or as a desk companion. Features floppy ears.",
 		"price": 20.00,
-		"imageUrl": "/doggo_plushie.png"
+		"imageUrl": "/images/doggo_plushie.png"
 	}
 ]
 `;

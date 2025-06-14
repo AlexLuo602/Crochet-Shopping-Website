@@ -1,20 +1,39 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import "../css/Home.css";
 import ItemGrid from "../components/ItemGrid";
+import { fetchItems } from "../redux/itemSlice";
+import "../css/Home.css";
 
 function Home() {
-	const allItems = useSelector((state) => state.items.items);
-	const [items, setItems] = useState([]);
-	const [status, setStatus] = useState("initial");
+	const dispatch = useDispatch();
+	const items = useSelector((state) => state.items.items);
+    const status = useSelector((state) => state.items.status);
+    const error = useSelector((state) => state.items.error);
 
 	useEffect(() => {
-		if (status === "initial") {
-			setItems(allItems);
-			setStatus("loaded");
+		if (status === "idle") {
+			dispatch(fetchItems());
 		}
-	}, [status]);
+	}, [status, dispatch]);
+
+    if (status === "loading") {
+        return (
+            <div className="content">
+                <h1 className="title">Ivy's Crochet World</h1>
+                <p>Loading items...</p> 
+            </div>
+        );
+    }
+
+    if (status === "failed") {
+        return (
+            <div className="content">
+                <h1 className="title">Ivy's Crochet World</h1>
+                <p style={{ color: 'red' }}>Error loading items: {error}</p>
+            </div>
+        );
+    }
 
 	return (
 		<div className="content">
