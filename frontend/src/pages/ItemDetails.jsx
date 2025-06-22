@@ -42,6 +42,7 @@ function ItemDetails() {
 				imageUrl: item.imageUrl,
 			})
 		);
+		alert(`${quantity} ${item.title} added to cart!`)
 	};
 
 	const handleAddWishlist = async () => {
