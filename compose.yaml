@@ -1,79 +1,24 @@
-# my-fullstack-app/docker-compose.yml (or compose.yaml)
-
-version: '3.8' # Always specify the Compose file format version
-
 services:
-  # -------------------------------------------------------------
-  # Backend Service (Express)
-  # -------------------------------------------------------------
-  backend:
-    build:
-      context: ./backend # Tells Docker Compose where to find the Dockerfile for the backend
-      dockerfile: Dockerfile # Explicitly name the Dockerfile if it's not just "Dockerfile"
-    ports:
-      - "8080:8080" # Maps host port 8080 to container port 8080 (adjust as per your Express app's port)
-    volumes:
-      # Mount the backend source code for hot-reloading during development.
-      # This means changes on your host machine instantly sync into the container.
-      - ./backend:/usr/src/app
-      # Exclude node_modules from the host mount to prevent inconsistencies
-      # and allow container to manage its own node_modules
-      - /usr/src/app/node_modules
-    environment:
-      NODE_ENV: development # Or 'production' for prod build
-      DATABASE_URL: mongodb://db:27017/mydatabase # Example: Link to your DB service
-    # Optional: Healthcheck to ensure the backend is truly ready
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"] # Adjust to your backend health endpoint
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 20s
-    depends_on:
-      db:
-        condition: service_healthy # Ensure the backend waits for the DB to be healthy
-
-  # -------------------------------------------------------------
-  # Frontend Service (React/Vite)
-  # -------------------------------------------------------------
+  # Frontend Service
   frontend:
     build:
-      context: ./frontend # Tells Docker Compose where to find the Dockerfile for the frontend
-      dockerfile: Dockerfile # Explicitly name the Dockerfile
+      context: ./frontend # directory containing dockerfile
     ports:
-      - "3000:3000" # Map host port 3000 to container port 3000 (Vite dev server default)
+      - "3000:3000"
     volumes:
-      # Mount the frontend source code for hot-reloading during development
-      - ./frontend:/usr/src/app
-      # Exclude node_modules from the host mount
-      - /usr/src/app/node_modules
+      - ./frontend:/app
+      - /app/node_modules
     environment:
-      # Example: Pass the backend URL to your React app.
-      # When running in Docker Compose, 'backend' resolves to the backend service's IP.
-      VITE_APP_BACKEND_URL: http://backend:8080 # Or use localhost:8080 if your frontend calls backend on host port
+      VITE_APP_API_URL: http://localhost:3001
     depends_on:
-      backend:
-        condition: service_healthy # Frontend waits for backend to be healthy (optional, but good practice)
+      - backend
 
-  # -------------------------------------------------------------
-  # Database Service (Example: MongoDB)
-  # -------------------------------------------------------------
-  db:
-    image: mongo:latest # Use a pre-built MongoDB image from Docker Hub
+  # Backend Service
+  backend:
+    build:
+      context: ./backend # directory containing dockerfile
     ports:
-      - "27017:27017" # Map host port 27017 to container port 27017 (for connecting from host tools)
+      - "3001:3001"
     volumes:
-      - db-data:/data/db # Persist database data to a named volume
-    # Optional: Healthcheck for MongoDB
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s # Give the DB time to start up before checking
-
-# -------------------------------------------------------------
-# Define named volumes for data persistence
-# -------------------------------------------------------------
-volumes:
-  db-data:
+      - ./backend:/app
+      - /app/node_modules
