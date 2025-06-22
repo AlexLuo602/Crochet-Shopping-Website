@@ -17,6 +17,10 @@ function ShoppingCart() {
 		dispatch(clearCart());
 	};
 
+	const handleCheckout = () => {
+		return;
+	};
+
 	return (
 		<main className="container">
 			<h1>Your Shopping Cart</h1>
@@ -78,11 +82,14 @@ function ShoppingCart() {
 							</tr>
 						</tfoot>
 					</table>
-
-					<div className="clear-cart">
-						<button onClick={handleClearCart} className="secondary">
-							Clear Cart
-						</button>
+					
+					<div className="shopping-cart-buttons">
+							<button onClick={handleClearCart} className="secondary">
+								Clear Cart
+							</button>
+							<button onClick={handleCheckout}>
+								Check Out
+							</button>
 					</div>
 				</>
 			)}
