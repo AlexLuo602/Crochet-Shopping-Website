@@ -10,6 +10,10 @@ I created a shopping website for the crochets that my sister made. All of the ph
 - TO BE DONE
 ## References
 - Boilerplate code to setup server from CPSC 310 repo: https://github.com/yood2/ubc-course-explorer
+- Learn express: https://www.youtube.com/watch?v=SccSCuHhOw0
+- Setting up MongoDB: https://www.youtube.com/watch?v=c2M-rlkkT5o
+- Learning Docker Compose: https://docs.docker.com/compose/gettingstarted/
+- Learn about MongoDB aggregation to handle the complex search feature: https://www.mongodb.com/docs/manual/tutorial/aggregation-examples/filtered-subset/
 
 # Assignment 2
 ## Description
