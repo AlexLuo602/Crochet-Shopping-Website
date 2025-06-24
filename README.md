@@ -5,7 +5,7 @@ Alex Luo
 ## Description
 I created a shopping website for the crochets that my sister made. All of the photos shown on the website are crochets that my sister actually made. The home page consistes of a grid of crochets for sale, as well as some useful links for the user, such as categories, search, and shopping cart. The navbar will exist throughout all of the pages, and will offer the user a useful way to navigate the website.
 ## Build Instructions
-- TO BE DONE: DOCKER COMPOSE
+- docker-compose up --build
 ## Extra Feature
 - TO BE DONE
 ## References
