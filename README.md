@@ -11,7 +11,7 @@ I created a shopping website for the crochets that my sister made. All of the ph
 - In the edit items page, there is also an add item button. Clicking on this will lead you to a form where you can fill in the information for the item. Once you are done, you can click submit, and it will bring you back to the edit items page, where you can see the item you just made. Going back to the home page, the item will still be there for you to see.
 ## Build Instructions
 - docker-compose up --build
-- navigate to [http:local](http://localhost:3000/)
+- navigate to http://localhost:3000/
 ## References
 - Boilerplate code to setup server from CPSC 310 repo: https://github.com/yood2/ubc-course-explorer
 - Learn express: https://www.youtube.com/watch?v=SccSCuHhOw0
