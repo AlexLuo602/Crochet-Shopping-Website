@@ -8,6 +8,7 @@ function Admin() {
             <div className="admin-links">
                 <Link to="/admin/shopping_carts_list">Shopping Carts List</Link>
                 <Link to="/admin/orders_list">Orders List</Link>
+                <Link to="/admin/edit-items">Edit Items</Link>
             </div>
 		</main>
 	);

@@ -93,6 +93,12 @@ export default class Server {
         // Admin stuff
         this.express.get("/admin/carts", this.CartsService.getAllCarts);
         this.express.get("/admin/orders", this.CartsService.getAllOrders);
+        this.express.post("/admin/add-item", 
+            this.ItemsService.uploadImageMiddleware,
+            this.ItemsService.addItem);
+        this.express.put("/admin/edit-item/:itemId", 
+            this.ItemsService.uploadImageMiddleware,
+            this.ItemsService.editItem);
     }
 
     registerStaticFiles() {

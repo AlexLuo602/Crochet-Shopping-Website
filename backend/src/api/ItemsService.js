@@ -1,10 +1,48 @@
 import StatusCodes from "http-status-codes";
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 import Log from "../util/Log.js";
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = path.join(__dirname, '../..', 'public', 'images');
+
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(new Error('Only images (jpeg, jpg, png, gif) are allowed!'));
+    }
+});
 class ItemsService {
     constructor(db, port) {
         this.db = db;
         this.port = port;
+        this.uploadImageMiddleware = upload.single('productImage');
     }
 
     __buildSearchPipeline(terms) {
@@ -349,6 +387,196 @@ class ItemsService {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Failed to fetch item attributes." });
         }
     }
+
+    addItem = async (req, res) => {
+        const { title, description, price } = req.body;
+        const uploadedFile = req.file;
+
+        if (!title || !description || !price || !uploadedFile) {
+            console.warn("ProductService::createProduct - Missing required fields or image for new product.");
+            if (uploadedFile) {
+                fs.unlink(uploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting partially uploaded file:", err);
+                });
+            }
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "All fields (title, description, price) and an image are required." });
+        }
+
+        const parsedPrice = parseFloat(price);
+        if (isNaN(parsedPrice) || parsedPrice <= 0) {
+            console.warn("ProductService::createProduct - Invalid price provided.");
+            if (uploadedFile) {
+                fs.unlink(uploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting invalid product image:", err);
+                });
+            }
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Price must be a positive number." });
+        }
+
+        try {
+            const productsCollection = this.db.collection('products');
+
+            const lastProduct = await productsCollection.find().sort({ id: -1 }).limit(1).toArray();
+            const newId = lastProduct.length > 0 ? lastProduct[0].id + 1 : 1;
+
+            const imageUrl = `/images/${uploadedFile.filename}`;
+
+            const newProduct = {
+                id: newId,
+                title,
+                description,
+                price: parseFloat(parsedPrice.toFixed(2)),
+                imageUrl,
+            };
+
+            const result = await productsCollection.insertOne(newProduct);
+
+            if (result.acknowledged) {
+                console.log(`ProductService::createProduct - Product '${title}' with ID ${newId} added successfully.`);
+                return res.status(StatusCodes.CREATED).json({
+                    message: "Product added successfully!",
+                    product: newProduct
+                });
+            } else {
+                console.error("ProductService::createProduct - Failed to insert product into DB.");
+                fs.unlink(uploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting file after DB insert failure:", err);
+                });
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to add product to database." });
+            }
+
+        } catch (error) {
+            console.error("ProductService::createProduct - Error adding product:", error);
+            if (uploadedFile) {
+                fs.unlink(uploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting file due to unhandled error:", err);
+                });
+            }
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An unexpected error occurred while adding the product." });
+        }
+    };
+
+    editItem = async (req, res) => {
+        const { itemId } = req.params;
+        const { title, description, price } = req.body;
+        const newUploadedFile = req.file;
+
+        // Validate Input
+        if (!title || !description || !price) {
+            console.warn(`ProductService::editItem - Missing required fields for item ID ${itemId}.`);
+            // If a new file was uploaded but validation fails, delete it
+            if (newUploadedFile) {
+                fs.unlink(newUploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting partially uploaded new file:", err);
+                });
+            }
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Title, description, and price are required." });
+        }
+
+        const parsedPrice = parseFloat(price);
+        if (isNaN(parsedPrice) || parsedPrice <= 0) {
+            console.warn(`ProductService::editItem - Invalid price provided for item ID ${itemId}.`);
+            if (newUploadedFile) {
+                fs.unlink(newUploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting invalid product image (new file):", err);
+                });
+            }
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Price must be a positive number." });
+        }
+
+        try {
+            const productsCollection = this.db.collection('products');
+            const productId = parseInt(itemId);
+
+            // Find existing item (hopefully it exists)
+            const existingProduct = await productsCollection.findOne({ id: productId });
+
+            if (!existingProduct) {
+                console.warn(`ProductService::editItem - Item with ID ${itemId} not found.`);
+                // If a new file was uploaded but the item doesn't exist, delete the new file
+                if (newUploadedFile) {
+                    fs.unlink(newUploadedFile.path, (err) => {
+                        if (err) console.error("Error deleting new file for non-existent product:", err);
+                    });
+                }
+                return res.status(StatusCodes.NOT_FOUND).json({ message: `Product with ID ${itemId} not found.` });
+            }
+
+            let updateFields = {
+                title,
+                description,
+                price: parseFloat(parsedPrice.toFixed(2)),
+            };
+            let oldImageUrlToDelete = null;
+
+            // Handle Image Update
+            if (newUploadedFile) {
+                // A new image was uploaded
+                updateFields.imageUrl = `/images/${newUploadedFile.filename}`;
+
+                // Check if there's an existing image to delete
+                if (existingProduct.imageUrl && existingProduct.imageUrl !== updateFields.imageUrl) {
+                    oldImageUrlToDelete = path.join(__dirname, '../public', existingProduct.imageUrl);
+                }
+                console.log(`ProductService::editItem - New image uploaded for item ID ${itemId}. Old image path: ${oldImageUrlToDelete}`);
+            } else {
+                // No new image uploaded, keep the existing one
+                updateFields.imageUrl = existingProduct.imageUrl;
+            }
+
+            // Update the product in the database
+            const result = await productsCollection.updateOne(
+                { id: productId },
+                { $set: updateFields }
+            );
+
+            if (result.matchedCount === 0) {
+                // additional check to make sure everything is gucci
+                console.error(`ProductService::editItem - Product with ID ${itemId} not found during update.`);
+                if (newUploadedFile) {
+                    fs.unlink(newUploadedFile.path, (err) => {
+                        if (err) console.error("Error deleting new file after no matching update:", err);
+                    });
+                }
+                return res.status(StatusCodes.NOT_FOUND).json({ message: `Product with ID ${itemId} not found for update.` });
+            }
+
+            if (result.modifiedCount === 0 && !newUploadedFile) {
+                // If no changes made, then count this as a successful no operation
+                console.log(`ProductService::editItem - No changes detected for item ID ${itemId}.`);
+                return res.status(StatusCodes.OK).json({ message: "No changes detected, product not updated.", product: existingProduct });
+            }
+
+            // Delete old image (if new one is uploaded)
+            if (oldImageUrlToDelete && fs.existsSync(oldImageUrlToDelete)) {
+                fs.unlink(oldImageUrlToDelete, (err) => {
+                    if (err) {
+                        console.error(`ProductService::editItem - Error deleting old image file ${oldImageUrlToDelete}:`, err);
+                    } else {
+                        console.log(`ProductService::editItem - Successfully deleted old image: ${oldImageUrlToDelete}`);
+                    }
+                });
+            }
+
+            // Return updated product
+            const updatedProduct = await productsCollection.findOne({ id: productId });
+            console.log(`ProductService::editItem - Product '${updatedProduct.title}' with ID ${itemId} updated successfully.`);
+            return res.status(StatusCodes.OK).json({
+                message: "Product updated successfully!",
+                product: updatedProduct
+            });
+
+        } catch (error) {
+            console.error(`ProductService::editItem - Error updating product ID ${itemId}:`, error);
+            // If an error occurs during DB operation, clean up new uploaded file
+            if (newUploadedFile) {
+                fs.unlink(newUploadedFile.path, (err) => {
+                    if (err) console.error("Error deleting new file due to unhandled error during update:", err);
+                });
+            }
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An unexpected error occurred while updating the product." });
+        }
+    };
 }
 
 export default ItemsService;

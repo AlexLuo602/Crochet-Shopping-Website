@@ -12,6 +12,9 @@ import AdminShoppingCarts from "./pages/AdminShoppingCart";
 import Category from "./pages/Category";
 import CheckoutPage from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import EditItemsList from "./pages/AdminEditItemsList";
+import EditItem from "./pages/AdminEditItem";
+import AddItem from "./pages/AdminAddItem";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeShoppingCart } from "./redux/cartSlice";
@@ -44,6 +47,9 @@ function App() {
 					<Route path="/admin/orders_list" element={<AdminOrders />} />
 					<Route path="/checkout" element={<CheckoutPage />} />
 					<Route path="/order-confirmation" element={<OrderConfirmation />} />
+					<Route path="/admin/add-item" element={<AddItem />} />
+					<Route path="/admin/edit-items" element={<EditItemsList />} />
+					<Route path="/admin/edit-item/:id" element={<EditItem />} />
 				</Routes>
 			</main>
 		</div>

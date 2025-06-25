@@ -1,0 +1,16 @@
+import { Link } from "react-router-dom";
+import "../css/ItemCard.css";
+
+function AdminItemCard({ item }) {
+	return (
+		<Link to={`/admin/edit-item/${item.id}`} key={item.id} className="item-card">
+			<img src={item.imageUrl} alt={item.title} />
+			<div className="item-text">
+				<h3> {item.title} </h3>
+				<p>${item.price}</p>
+			</div>
+		</Link>
+	);
+}
+
+export default AdminItemCard;
