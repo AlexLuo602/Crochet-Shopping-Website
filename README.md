@@ -2,6 +2,8 @@
 Alex Luo
 
 # Assignment 3
+## Website Name
+Ivy's Crochet World
 ## Description
 I created a shopping website for the crochets that my sister made. All of the photos shown on the website are crochets that my sister actually made. The home page consistes of a grid of crochets for sale, as well as some useful links for the user, such as categories, search, and shopping cart. The navbar will exist throughout all of the pages, and will offer the user a useful way to navigate the website.
 ## Extra Feature
