@@ -1,34 +1,41 @@
-import { useState, useEffect } from "react";
-import "../css/Home.css";
-import { useSelector } from "react-redux";
+import { useState } from "react";
+const BASE_API_URL = import.meta.env.VITE_APP_API_URL
 import ItemGrid from "../components/ItemGrid";
+import "../css/Home.css";
 
 function Search() {
-	const allItems = useSelector((state) => state.items.items);
 	const [items, setItems] = useState([]);
 	const [searchText, setSearchText] = useState("");
 	const [searchResult, setSearchResult] = useState("");
-	const [status, setStatus] = useState("initial");
-
-	useEffect(() => {
-		if (status === "initial") {
-			setItems(allItems);
-			setStatus("loaded");
-		}
-	}, [status]);
+	const [searchStatus, setSearchStatus] = useState("fulfilled");
 
 	const handleSearch = async (e) => {
 		e.preventDefault();
 
-		const filtered_items = allItems.filter((item) => {
-			const title_lower = item.title.toLowerCase();
-			const search_lower = searchText.toLowerCase();
-			return title_lower.includes(search_lower);
-		});
+		if (searchText.trim() === "") {
+			setItems([])
+			setSearchStatus("failed");
+			setSearchResult("");
+			return;
+		}
 
-		setItems(filtered_items);
+		try {
+			const response = await fetch(`${BASE_API_URL}/items/search?q=${searchText}`);
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			setItems(data.result);
+		} catch(err) {
+			console.error("Error fetching search items:", err);
+			return []
+		}
+
 		setSearchResult(searchText);
 		setSearchText("");
+		setSearchStatus("fulfilled");
 	};
 
 	return (
@@ -54,7 +61,11 @@ function Search() {
 				</fieldset>
 				<input type="submit" value="Search" />
 			</form>
-			<ItemGrid items={items} />
+			{searchStatus === "failed" ? (
+				<div>No products found</div>
+			) : (
+				<ItemGrid items={items} />
+			)}
 		</div>
 	);
 }

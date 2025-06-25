@@ -1,9 +1,10 @@
 .navbar {
-	padding-left: 6rem;
+	padding-left: 3rem;
 	padding-right: 6rem;
 	background-color: rgba(9, 88, 133, 0.836);
 	margin-bottom: 1rem;
 	font-weight: bolder;
+	width: 100%;
 }
 
 .navbar div {
@@ -36,4 +37,26 @@
 	pointer-events: none;
 	font-size: 15px;
 	font-weight: 480;
+}
+
+@media (max-width: 450px) {
+	.navbar {
+		font-size: 15px;
+		padding-left: 2rem;
+	}
+	.navbar-shopping-cart-quantity {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-left: 0.6rem;
+		padding-bottom: 2.0rem;
+		pointer-events: none;
+		font-size: 15px;
+		font-weight: 480;
+	}
 }

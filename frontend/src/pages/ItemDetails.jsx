@@ -1,21 +1,59 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addItemToCart } from "../redux/cartSlice";
+import { addToCart } from '../redux/cartSlice';
 import {
 	addItemToWishlist,
 	removeItemFromWishlist,
 } from "../redux/wishlistSlice";
+import { fetchItems } from "../redux/itemSlice";
+const BASE_API_URL = import.meta.env.VITE_APP_API_URL
 import "../css/ItemDetails.css";
 
 function ItemDetails() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
 	const items = useSelector((state) => state.items.items);
+	const status = useSelector((state) => state.items.status);
 	const wishlistIDs = useSelector((state) => state.wishlist.itemIDs);
 	const [inWishlist, setInWishlist] = useState(false);
 	const [item, setItem] = useState();
 	const [quantity, setQuantity] = useState("1");
+	const [attributes, setAttributes] = useState([]);
+	const [attributesLoading, setAttributesLoading] = useState(true)
+	const [selectedAttribute, setSelectedAttribute] = useState("");
+	const [selectedPrice, setSelectedPrice] = useState(-1);
+	const cartId = useSelector(state => state.cart.shoppingCartId);
+
+	useEffect(() => {
+		if (status === "idle") {
+			dispatch(fetchItems());
+		}
+	}, [status, dispatch]);
+
+	useEffect(() => {
+		const fetchAttributes = async() => {
+			try {
+				const response = await fetch(`${BASE_API_URL}/items/attributes/${id}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+				const data = await response.json();
+                setAttributes(data.result);
+				setSelectedAttribute(data.result[0].attributeValue)
+				setSelectedPrice(data.result[0].price.toFixed(2))
+			} catch(err) {
+				console.error("Error fetching attribute items:", err);
+				return;
+			}
+		}
+
+        if (!attributesLoading) return;
+		fetchAttributes();
+		setAttributesLoading(false);
+	}, [attributesLoading, attributes]);
 
 	useEffect(() => {
 		try {
@@ -30,18 +68,16 @@ function ItemDetails() {
 		} catch (e) {
 			console.error(`Unexpected error thrown! ${e}`);
 		}
-	}, [id, wishlistIDs]);
+	}, [id, wishlistIDs, status]);
 
 	const handleCartSubmit = async () => {
-		dispatch(
-			addItemToCart({
-				id: item.id,
-				name: item.title,
-				price: item.price,
-				quantity: parseInt(quantity),
-				imageUrl: item.imageUrl,
-			})
-		);
+        dispatch(addToCart({
+            cartId: cartId,
+            productId: item.id,
+            quantity: parseInt(quantity),
+            selectedAttribute: selectedAttribute,
+			selectedPrice: selectedPrice
+        }));
 		alert(`${quantity} ${item.title} added to cart!`)
 	};
 
@@ -67,10 +103,41 @@ function ItemDetails() {
 			<div className="item-details"></div>
 			<article className="shopping-cart">
 				<h1>{item.title}</h1>
-				<h4 className="item-price">${item.price}</h4>
+				{selectedPrice === -1 ? (
+					<h4 className="item-price">${item.price}</h4>
+				) : (
+					<h4 className="item-price">${selectedPrice}</h4>
+				)}
 				<div className="item-description">{item.description}</div>
 				<div>
 					<form class-name="drop-down">
+						{attributes.length !== 0 && 
+						<div className="select-quantity">
+							<select
+								className="drop-down-button"
+								name="select"
+								aria-label="Select"
+								required
+								value={selectedAttribute}
+								onChange={(e) => {
+									const newAttributeValue = e.target.value;
+									setSelectedAttribute(newAttributeValue);
+					
+									const foundAttribute = attributes.find(
+										(attr) => attr.attributeValue === newAttributeValue
+									);
+					
+									setSelectedPrice(foundAttribute.price.toFixed(2));
+								}}
+							>
+								{attributes.map((attribute) => (
+									<option value={attribute.attributeValue}>
+										&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;{attribute.attributeValue}
+									</option>
+								))}
+							</select>
+							<div className="quantity-overlay">Size: </div>
+						</div>}
 						<div className="select-quantity">
 							<select
 								className="drop-down-button"

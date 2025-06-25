@@ -16,7 +16,6 @@ export const fetchItems = createAsyncThunk(
                 return {
                     id: itemJson.id,
                     title: itemJson.title,
-                    category: itemJson.category,
                     description: itemJson.description,
                     price: parseFloat(itemJson.price).toFixed(2),
                     imageUrl: itemJson.imageUrl,

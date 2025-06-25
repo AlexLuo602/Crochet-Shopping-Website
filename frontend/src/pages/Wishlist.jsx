@@ -39,7 +39,7 @@ function WishList() {
 											<img
 												className="shopping-cart-product-image"
 												src={item.imageUrl}
-											/>{" "}
+											/>
 											{item.name}
 										</div>
 									</td>
