@@ -2,10 +2,12 @@
 Alex Luo
 
 # Assignment 3
+## Website Name
+Ivy's Crochet World
 ## Description
 I created a shopping website for the crochets that my sister made. All of the photos shown on the website are crochets that my sister actually made. The home page consistes of a grid of crochets for sale, as well as some useful links for the user, such as categories, search, and shopping cart. The navbar will exist throughout all of the pages, and will offer the user a useful way to navigate the website.
 ## Extra Feature
-- TO BE DONE
+- Added a feature under admin page to edit items. Here, you can add an item using the add item button.
 ## Build Instructions
 - docker-compose up --build
 ## References
@@ -14,6 +16,7 @@ I created a shopping website for the crochets that my sister made. All of the ph
 - Setting up MongoDB: https://www.youtube.com/watch?v=c2M-rlkkT5o
 - Learning Docker Compose: https://docs.docker.com/compose/gettingstarted/
 - Learn about MongoDB aggregation to handle the complex search feature: https://www.mongodb.com/docs/manual/tutorial/aggregation-examples/filtered-subset/
+- Learning about Multer library for file uploading on backend
 
 # Assignment 2
 ## Description
