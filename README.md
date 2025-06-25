@@ -7,7 +7,8 @@ Ivy's Crochet World
 ## Description
 I created a shopping website for the crochets that my sister made. All of the photos shown on the website are crochets that my sister actually made. The home page consistes of a grid of crochets for sale, as well as some useful links for the user, such as categories, search, and shopping cart. The navbar will exist throughout all of the pages, and will offer the user a useful way to navigate the website.
 ## Extra Feature
-- Added a feature under admin page to edit items. Here, you can add an item using the add item button.
+- Added a feature under admin page to edit items. Once you click on the edit items link, you can choose an item from the item card grid. Once you click on an item, you go into edit item page. From here, the boxes are prefilled with the original item information. You can feel free to change anything there. Click submit update to successfuly update the item.
+- In the edit items page, there is also an add item button. Clicking on this will lead you to a form where you can 
 ## Build Instructions
 - docker-compose up --build
 ## References
