@@ -14,9 +14,14 @@
 	border-radius: 0.8rem;
 }
 
-.clear-cart {
+.shopping-cart-buttons {
 	display: flex;
+	margin: auto;
+	padding-right: 6rem;
+	padding-left: 1rem;
+	justify-content: space-between;
 }
+
 
 @media (max-width: 800px) {
 	.shopping-cart-product {

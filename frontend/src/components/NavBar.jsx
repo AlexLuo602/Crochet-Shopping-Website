@@ -13,6 +13,18 @@ function Navbar() {
 						<div>Home</div>
 					</Link>
 				</li>
+				<li>|</li>
+				<li>
+					<Link to="/categories/Best-Sellers">
+						<div>Best Sellers</div>
+					</Link>
+				</li>
+				<li>|</li>
+				<li>
+					<Link to="/admin">
+						<div>Admin</div>
+					</Link>
+				</li>
 			</ul>
 			<ul>
 				<li>

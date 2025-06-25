@@ -1,21 +1,42 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeItemFromCart, clearCart } from "../redux/cartSlice";
-import { Link } from "react-router-dom";
+import { removeFromCart, emptyCart } from "../redux/cartSlice";
+import { fetchItems } from "../redux/itemSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import "../css/ShoppingCart.css";
 
 function ShoppingCart() {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const cartItems = useSelector((state) => state.cart.items);
+    const status = useSelector((state) => state.items.status);
 	const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 	const totalPrice = useSelector((state) => state.cart.totalPrice);
+	const cartId = useSelector(state => state.cart.shoppingCartId);
 
-	const handleRemoveItem = (id) => {
-		dispatch(removeItemFromCart(id));
+	const handleRemoveItem = (productId) => {
+		dispatch(removeFromCart({
+			"cartId": cartId, 
+			"productId": productId}));
 	};
+
+	useEffect(() => {
+		if (status === "idle") {
+			dispatch(fetchItems());
+		}
+	}, [status, dispatch]);
 
 	const handleClearCart = () => {
-		dispatch(clearCart());
+		dispatch(emptyCart(cartId));
 	};
+
+    const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            alert("Your cart is empty. Please add items before checking out.");
+            return;
+        }
+        navigate('/checkout');
+    };
 
 	return (
 		<main className="container">
@@ -30,6 +51,7 @@ function ShoppingCart() {
 						<thead>
 							<tr>
 								<th scope="col">Product</th>
+								<th scope="col">Size</th>
 								<th scope="col">Price</th>
 								<th scope="col">Quantity</th>
 								<th scope="col">Subtotal</th>
@@ -38,23 +60,24 @@ function ShoppingCart() {
 						</thead>
 						<tbody>
 							{cartItems.map((item) => (
-								<tr key={item.id}>
+								<tr key={item.productId}>
 									<td>
 										<div className="shopping-cart-product">
 											<img
 												className="shopping-cart-product-image"
 												src={item.imageUrl}
-											/>{" "}
+											/>
 											{item.name}
 										</div>
 									</td>
+									<td>{item.selectedAttribute || "N/A"}</td>
 									<td>${parseFloat(item.price).toFixed(2)}</td>
 									<td>{item.quantity}</td>
 									<td>
 										${(parseFloat(item.price) * item.quantity).toFixed(2)}
 									</td>
 									<td>
-										<button onClick={() => handleRemoveItem(item.id)}>
+										<button onClick={() => handleRemoveItem(item.productId)}>
 											Remove
 										</button>
 									</td>
@@ -78,11 +101,14 @@ function ShoppingCart() {
 							</tr>
 						</tfoot>
 					</table>
-
-					<div className="clear-cart">
-						<button onClick={handleClearCart} className="secondary">
-							Clear Cart
-						</button>
+					
+					<div className="shopping-cart-buttons">
+							<button onClick={handleCheckout}>
+								Check Out
+							</button>
+							<button onClick={handleClearCart} className="secondary">
+								Clear Cart
+							</button>
 					</div>
 				</>
 			)}

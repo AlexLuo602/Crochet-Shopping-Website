@@ -1,0 +1,51 @@
+services:
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend # directory containing dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_APP_API_URL: http://localhost:3001
+    depends_on:
+      - backend
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend # directory containing dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - /app/node_modules
+    command: ["npm", "start"]
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/455Assignment
+    develop:
+      watch:
+        - path: ./backend/src
+          action: sync+restart
+          target: /app/src
+        - action: rebuild
+          path: ./backend/package.json
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:8.0
+    command:
+      - '--logpath'
+      - '/var/log/mongodb/mongod.log'
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-init:/docker-entrypoint-initdb.d
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: 455Assignment
+
+volumes:
+  mongodb_data:

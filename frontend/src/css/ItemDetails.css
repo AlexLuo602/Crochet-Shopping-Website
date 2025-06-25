@@ -1,10 +1,7 @@
 .item-details-content {
-	padding-left: 20rem;
-	padding-right: 20rem;
-	padding-top: 2rem;
-	padding-bottom: 1rem;
 	display: flex;
 	justify-content: center;
+	width: 100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
@@ -143,5 +140,29 @@
 
 	.shopping-cart h4 {
 		font-size: 1rem;
+	}
+}
+
+@media (max-width: 450px) {
+	.image-details {
+		max-width: 14rem;
+		margin-right: 0.5rem;
+	}
+
+	.shopping-cart {
+		font-size: 0.8rem;
+	}
+
+	.shopping-cart h1 {
+		font-size: 1.2rem;
+	}
+
+	.shopping-cart h4 {
+		font-size: 1rem;
+	}
+
+	.item-details-content {
+		flex-direction: column;
+		padding: 2rem;
 	}
 }
