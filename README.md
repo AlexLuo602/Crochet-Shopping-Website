@@ -1,6 +1,9 @@
 # Name
 Alex Luo
 
+# Aliases
+Alex602 = AlexLuo602
+
 # Assignment 3
 ## Website Name
 Ivy's Crochet World
