@@ -1,6 +1,3 @@
-# Aliases
-Alex602 = AlexLuo602
-
 ## Website Name
 Ivy's Crochet World
 ## Description
@@ -40,3 +37,6 @@ I spent a lot of time trying to get the shopping cart icon to dynamically update
 - Learn about MongoDB aggregation to handle the complex search feature: https://www.mongodb.com/docs/manual/tutorial/aggregation-examples/filtered-subset/
 - Learning about Multer library for file uploading on backend https://www.npmjs.com/package/multer
 - Learned React from this tutorial: https://www.youtube.com/watch?v=G6D9cBaLViA
+
+## Aliases
+Alex602 = AlexLuo602
